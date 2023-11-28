@@ -1,0 +1,107 @@
+CREATE DATABASE "DriverLicense"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+CREATE TABLE IF NOT EXISTS public."Applicant"
+(
+    "ApplicantID" integer NOT NULL,
+    "FirstName" text COLLATE pg_catalog."default",
+    "LastName" text COLLATE pg_catalog."default",
+    "Patronymic" text COLLATE pg_catalog."default",
+    "Birthdate" date,
+    "PhoneNumber" "char",
+    "Email" character varying(320) COLLATE pg_catalog."default",
+    CONSTRAINT "Applicant_pkey" PRIMARY KEY ("ApplicantID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Application"
+(
+    "ApplicationID" integer,
+    "Applicant" integer,
+    "Officer" integer,
+    "Department" integer,
+    "Date" date,
+    "ProgressStage" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Department"
+(
+    "DepartmentID" integer NOT NULL,
+    "DepartmentName" text COLLATE pg_catalog."default",
+    "Address" text COLLATE pg_catalog."default",
+    CONSTRAINT "Department_pkey" PRIMARY KEY ("DepartmentID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Officer"
+(
+    "OfficerID" integer NOT NULL,
+    "FirstName" text COLLATE pg_catalog."default",
+    "LastName" text COLLATE pg_catalog."default",
+    "PhoneNumber" "char",
+    "Email" character varying(320) COLLATE pg_catalog."default",
+    CONSTRAINT "Officer_pkey" PRIMARY KEY ("OfficerID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Progress"
+(
+    "ProgressID" integer NOT NULL,
+    "Applicant" integer,
+    "Stage" integer,
+    "StartDate" date,
+    "EndDate" date,
+    "Passed" boolean,
+    CONSTRAINT "Progress_pkey" PRIMARY KEY ("ProgressID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Stage"
+(
+    "StageID" integer NOT NULL,
+    "StageName" text COLLATE pg_catalog."default",
+    "StageDescrip" text COLLATE pg_catalog."default",
+    CONSTRAINT "Stage_pkey" PRIMARY KEY ("StageID")
+);
+
+ALTER TABLE IF EXISTS public."Application"
+    ADD FOREIGN KEY ("ProgressStage")
+    REFERENCES public."Progress" ("ProgressID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application"
+    ADD FOREIGN KEY ("Department")
+    REFERENCES public."Department" ("DepartmentID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application"
+    ADD FOREIGN KEY ("Officer")
+    REFERENCES public."Officer" ("OfficerID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application"
+    ADD FOREIGN KEY ("Applicant")
+    REFERENCES public."Applicant" ("ApplicantID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Progress"
+    ADD FOREIGN KEY ("Stage")
+    REFERENCES public."Stage" ("StageID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+END;

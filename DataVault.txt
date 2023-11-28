@@ -1,0 +1,191 @@
+CREATE TABLE IF NOT EXISTS public."Application_Hub"
+(
+    "ApplicationID" integer,
+    "Date" date,
+    PRIMARY KEY ("ApplicationID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Applicant_Hub"
+(
+    "ApplicantID" integer,
+    "FirstName" text,
+    "LastName" text,
+    "Patronymic" text,
+    PRIMARY KEY ("ApplicantID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Officer_Hub"
+(
+    "OfficerID" integer,
+    "FirstName" text,
+    "LastName" text,
+    PRIMARY KEY ("OfficerID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Application_Officer_Link"
+(
+    "Application_Officer_Link_ID" integer,
+    "ApplicationID" integer,
+    "OfficerID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Officer_Sat"
+(
+    "OfficerID" integer,
+    "PhoneNumber" "char",
+    "Email" character varying(32)
+);
+
+CREATE TABLE IF NOT EXISTS public."Application_Applicant_Link"
+(
+    "Application_Applicant_Link_ID" integer,
+    "ApplicationID" integer,
+    "ApplicantID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Application_Sat"
+(
+    "Birthdate" date,
+    "PhoneNumber" "char",
+    "Email" character varying(32),
+    "ApplicantID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Department_Hub"
+(
+    "DepartmentID" integer,
+    "DepartmentName" text,
+    PRIMARY KEY ("DepartmentID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Application_Department_Link"
+(
+    "Application_Department_Link_ID" integer,
+    "ApplicationID" integer,
+    "DepartmentID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Department_Sat"
+(
+    "Address" text,
+    "DepartmentID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Progress_Hub"
+(
+    "ProgressID" integer,
+    "Stage" integer,
+    "StartDate" date,
+    "EndDate" date,
+    PRIMARY KEY ("ProgressID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Application_Progress_Link"
+(
+    "Application_Progress_Link_ID" integer,
+    "ApplicationID" integer,
+    "ProgressID" integer
+);
+
+CREATE TABLE IF NOT EXISTS public."Progress_Sat"
+(
+    "ProgressID" integer,
+    "Passed" boolean
+);
+
+ALTER TABLE IF EXISTS public."Application_Officer_Link"
+    ADD FOREIGN KEY ("ApplicationID")
+    REFERENCES public."Application_Hub" ("ApplicationID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Officer_Link"
+    ADD FOREIGN KEY ("OfficerID")
+    REFERENCES public."Officer_Hub" ("OfficerID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Officer_Sat"
+    ADD FOREIGN KEY ("OfficerID")
+    REFERENCES public."Officer_Hub" ("OfficerID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Applicant_Link"
+    ADD FOREIGN KEY ("ApplicationID")
+    REFERENCES public."Application_Hub" ("ApplicationID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Applicant_Link"
+    ADD FOREIGN KEY ("ApplicantID")
+    REFERENCES public."Applicant_Hub" ("ApplicantID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Sat"
+    ADD FOREIGN KEY ("ApplicantID")
+    REFERENCES public."Applicant_Hub" ("ApplicantID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Department_Link"
+    ADD FOREIGN KEY ("ApplicationID")
+    REFERENCES public."Application_Hub" ("ApplicationID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Department_Link"
+    ADD FOREIGN KEY ("DepartmentID")
+    REFERENCES public."Department_Hub" ("DepartmentID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Department_Sat"
+    ADD FOREIGN KEY ("DepartmentID")
+    REFERENCES public."Department_Hub" ("DepartmentID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Progress_Link"
+    ADD FOREIGN KEY ("ApplicationID")
+    REFERENCES public."Application_Hub" ("ApplicationID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Application_Progress_Link"
+    ADD FOREIGN KEY ("ProgressID")
+    REFERENCES public."Progress_Hub" ("ProgressID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."Progress_Sat"
+    ADD FOREIGN KEY ("ProgressID")
+    REFERENCES public."Progress_Hub" ("ProgressID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+END;
